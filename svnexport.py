@@ -63,10 +63,10 @@ def export_entry(rurl, epath, entry):
     rev = entry[2]
     
     if entry[1] == 'dir':
-        log = 'Created directory "%s"...' %uname.encode(__encoding__)
+        log = 'Created directory "%s"...' %uname
         os.mkdir(os.path.join(epath, uname))
     elif entry[1] == 'file':
-        log = 'Exported "%s": r%i...' %(uname.encode(__encoding__), rev)
+        log = 'Exported "%s": r%i...' %(uname, rev)
 
         root, ext = os.path.splitext(uname)
         fname = '%s-r%i%s' %(root, rev, ext)
@@ -95,7 +95,7 @@ def export(rurl, epath, list_only=False, entry_rev=False):
     entries = get_entries(rurl)
     if not list_only:
         for e in entries:
-            print export_entry(rurl, epath, e)
+            print export_entry(rurl, epath, e).encode(__encoding__)
     else:
         print list_entries(entries).encode(__encoding__)
         
