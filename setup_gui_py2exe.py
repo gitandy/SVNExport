@@ -23,7 +23,7 @@ class BuildExe:
         self.script = 'SVNExportGUI.py'
  
         #Name of program
-        self.project_name = 'SVN-Export'
+        self.project_name = 'SVN-Export GUI'
  
         #Project url
         self.project_url = 'http://www.schawo.de'
@@ -40,7 +40,7 @@ class BuildExe:
         self.copyright = SVNExportGUI.__copyright__
  
         #Description
-        self.project_description = 'Exports SVN repositories to a given path'
+        self.project_description = 'GUI to Exports SVN repositories to a given path'
  
         #Icon file
         self.icon_file = 'svnexport.ico'
