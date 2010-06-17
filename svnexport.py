@@ -58,20 +58,23 @@ def get_entries(rurl, entry_rev=False):
     return tuple(entries)
 
 def export_entry(rurl, epath, entry):
+    log = ''
     uname = entry[0].decode('utf-8')
     rev = entry[2]
     
     if entry[1] == 'dir':
-        print 'Creating directory "%s"...' %uname.encode(__encoding__)
+        log = 'Created directory "%s"...' %uname.encode(__encoding__)
         os.mkdir(os.path.join(epath, uname))
     elif entry[1] == 'file':
-        print 'Exporting "%s": r%i...' %(uname.encode(__encoding__), rev)
+        log = 'Exported "%s": r%i...' %(uname.encode(__encoding__), rev)
 
         root, ext = os.path.splitext(uname)
         fname = '%s-r%i%s' %(root, rev, ext)
         with open(os.path.join(epath, fname), 'wb') as f:
             client = pysvn.Client()
             f.write(client.cat(rurl + '/' + urllib.quote(entry[0])))
+
+    return log
 
 def list_entries(entries):
     text = ''
@@ -92,7 +95,7 @@ def export(rurl, epath, list_only=False, entry_rev=False):
     entries = get_entries(rurl)
     if not list_only:
         for e in entries:
-            export_entry(rurl, epath, e)
+            print export_entry(rurl, epath, e)
     else:
         print list_entries(entries)
         

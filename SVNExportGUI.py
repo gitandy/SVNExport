@@ -64,13 +64,16 @@ class SVNExportFrame( wx_svnexport.Frame ):
     def OnTimer(self, evt):
         if len(self._entries) > 0:
             entry = self._entries.pop(0)
-            export_entry(self.rurl, self.epath, entry)
+            self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry))
             self.m_gaugeProgress.SetValue(self.m_gaugeProgress.GetValue()+1)
             self.m_timer.Start(1, True)
         else:
+            self.m_statusBar.SetStatusText('Done')
             self._SetEnabled()
         
     def OnExport(self, evt):
+        self.m_statusBar.SetStatusText('')
+        
         self.rurl = self.m_textCtrlURL.GetValue()
         self.epath = self.m_dirPickerPath.GetPath()
         entry_rev = self.m_checkBoxEntryRev.IsChecked()
