@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
     epath = None 
     if not options.repos:
-        print 'Repository must be specified'
+        print 'Repository must be specified\nTry "%s --help" for more information' %sys.argv[0]
         sys.exit(1)
     else:
         if options.output == None:
