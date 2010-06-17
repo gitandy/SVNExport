@@ -49,6 +49,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
 
         self.m_dirPickerPath.SetPath(os.path.join(os.getcwd(), 'export'))
         
+        self.Bind(wx.EVT_BUTTON, self.OnList, self.m_buttonList)
         self.Bind(wx.EVT_BUTTON, self.OnExport, self.m_buttonExport)
         self.Bind(wx.EVT_BUTTON, self.OnExit, self.m_buttonExit)
         self.Bind(wx.EVT_MENU, self.OnAbout, self.m_menuAbout)
@@ -57,6 +58,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         self.Bind(wx.EVT_TIMER, self.OnTimer, self.m_timer)
 
     def _SetEnabled(self, state=True):
+        self.m_buttonList.Enable(state)
         self.m_buttonExport.Enable(state)
 
     def _SetDisabled(self):
@@ -66,6 +68,19 @@ class SVNExportFrame( wx_svnexport.Frame ):
         text = 'SVN-Export\n\n' + 'Version: %s\n\n' %__version__ + __copyright__
         dlg = wx.MessageDialog(self, text, 'About', wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
+
+    def OnList(self, evt):
+        self.m_statusBar.SetStatusText('')
+        
+        rurl = self.m_textCtrlURL.GetValue()
+        entry_rev = self.m_checkBoxEntryRev.IsChecked()
+
+        self._SetDisabled()
+        text = list_entries(get_entries(rurl, entry_rev))
+
+        dlg = wx.MessageDialog(self, text, 'List', wx.OK|wx.ICON_INFORMATION)
+        dlg.ShowModal()
+        self._SetEnabled()
 
     def OnTimer(self, evt):
         if len(self._entries) > 0:

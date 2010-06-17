@@ -57,6 +57,9 @@ class Frame ( wx.Frame ):
 		
 		bSizer2.Add( bSizer4, 1, wx.EXPAND, 5 )
 		
+		self.m_buttonList = wx.Button( self, wx.ID_ANY, u"List", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer2.Add( self.m_buttonList, 0, wx.ALIGN_BOTTOM|wx.ALIGN_RIGHT|wx.ALL, 5 )
+		
 		self.m_buttonExport = wx.Button( self, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer2.Add( self.m_buttonExport, 0, wx.ALIGN_BOTTOM|wx.ALIGN_RIGHT|wx.ALL, 5 )
 		

@@ -87,7 +87,7 @@ def list_entries(entries):
             t = 'F'
 
         if not t == None:
-            text += '%s: %s: r%i\n' %(t, e[0].decode('utf-8').encode(__encoding__), e[2])
+            text += '%s: %s: r%i\n' %(t, e[0].decode('utf-8'), e[2])
 
     return text
 
@@ -97,7 +97,7 @@ def export(rurl, epath, list_only=False, entry_rev=False):
         for e in entries:
             print export_entry(rurl, epath, e)
     else:
-        print list_entries(entries)
+        print list_entries(entries).encode(__encoding__)
         
 
 if __name__ == '__main__':
