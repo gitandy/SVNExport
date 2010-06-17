@@ -41,40 +41,61 @@ try:
 except:
     pass
 
-def export(rurl, epath, list_only=False, entry_rev=False):
+def get_entries(rurl, entry_rev=False):
     client = pysvn.Client()
     info = client.info2(rurl, recurse=True)
 
+    entries = []
     for i in info[1:]:
         name = i[0]
-        uname = name.decode('utf-8')
         kind = str(i[1]['kind'])
-
         rev = i[1]['rev'].number
         if entry_rev:
             rev = i[1]['last_changed_rev'].number
 
-        if not list_only:
-            if kind == 'dir':
-                print 'Creating directory "%s"...' %uname.encode(__encoding__)
-                os.mkdir(os.path.join(epath, uname))
-            elif kind == 'file':
-                print 'Exporting "%s": r%i...' %(uname.encode(__encoding__), rev)
+        entries.append((name, kind, rev))
 
-                root, ext = os.path.splitext(uname)
-                fname = '%s-r%i%s' %(root, rev, ext)
-                with open(os.path.join(epath, fname), 'wb') as f:
-                    f.write(client.cat(rurl + '/' + urllib.quote(name)))
-        else:
-            t = None
-            if kind == 'dir':
-                t = 'D'
-            elif kind == 'file':
-                t = 'F'
+    return tuple(entries)
 
-            if not t == None:
-                print '%s: %s: r%i' %(t, uname.encode(__encoding__), rev)
-            
+def export_entry(rurl, epath, entry):
+    uname = entry[0].decode('utf-8')
+    rev = entry[2]
+    
+    if entry[1] == 'dir':
+        print 'Creating directory "%s"...' %uname.encode(__encoding__)
+        os.mkdir(os.path.join(epath, uname))
+    elif entry[1] == 'file':
+        print 'Exporting "%s": r%i...' %(uname.encode(__encoding__), rev)
+
+        root, ext = os.path.splitext(uname)
+        fname = '%s-r%i%s' %(root, rev, ext)
+        with open(os.path.join(epath, fname), 'wb') as f:
+            client = pysvn.Client()
+            f.write(client.cat(rurl + '/' + urllib.quote(entry[0])))
+
+def list_entries(entries):
+    text = ''
+
+    for e in entries:
+        t = None
+        if e[1] == 'dir':
+            t = 'D'
+        elif e[1] == 'file':
+            t = 'F'
+
+        if not t == None:
+            text += '%s: %s: r%i\n' %(t, e[0].decode('utf-8').encode(__encoding__), e[2])
+
+    return text
+
+def export(rurl, epath, list_only=False, entry_rev=False):
+    entries = get_entries(rurl)
+    if not list_only:
+        for e in entries:
+            export_entry(rurl, epath, e)
+    else:
+        print list_entries(entries)
+        
 
 if __name__ == '__main__':
     from optparse import OptionParser
