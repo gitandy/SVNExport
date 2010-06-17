@@ -50,8 +50,12 @@ class Frame ( wx.Frame ):
 		
 		bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
 		
+		bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 		
-		bSizer2.AddSpacer( ( 0, 0 ) )
+		
+		bSizer4.AddSpacer( ( 0, 0 ) )
+		
+		bSizer2.Add( bSizer4, 1, wx.EXPAND, 5 )
 		
 		self.m_buttonExport = wx.Button( self, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer2.Add( self.m_buttonExport, 0, wx.ALIGN_BOTTOM|wx.ALIGN_RIGHT|wx.ALL, 5 )
@@ -64,6 +68,15 @@ class Frame ( wx.Frame ):
 		self.SetSizer( bSizer1 )
 		self.Layout()
 		self.m_statusBar = self.CreateStatusBar( 1, wx.ST_SIZEGRIP, wx.ID_ANY )
+		self.m_menubar1 = wx.MenuBar( 0 )
+		self.m_menuHelp = wx.Menu()
+		self.m_menuAbout = wx.MenuItem( self.m_menuHelp, wx.ID_ANY, u"About", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuHelp.AppendItem( self.m_menuAbout )
+		
+		self.m_menubar1.Append( self.m_menuHelp, u"?" )
+		
+		self.SetMenuBar( self.m_menubar1 )
+		
 	
 	def __del__( self ):
 		pass

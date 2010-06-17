@@ -51,6 +51,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         
         self.Bind(wx.EVT_BUTTON, self.OnExport, self.m_buttonExport)
         self.Bind(wx.EVT_BUTTON, self.OnExit, self.m_buttonExit)
+        self.Bind(wx.EVT_MENU, self.OnAbout, self.m_menuAbout)
 
         self.m_timer = wx.Timer(self, wx.ID_ANY)
         self.Bind(wx.EVT_TIMER, self.OnTimer, self.m_timer)
@@ -60,6 +61,11 @@ class SVNExportFrame( wx_svnexport.Frame ):
 
     def _SetDisabled(self):
         self._SetEnabled(False)
+
+    def OnAbout(self, evt):
+        text = 'SVN-Export\n\n' + 'Version: %s\n\n' %__version__ + __copyright__
+        dlg = wx.MessageDialog(self, text, 'About', wx.OK|wx.ICON_INFORMATION)
+        dlg.ShowModal()
 
     def OnTimer(self, evt):
         if len(self._entries) > 0:
