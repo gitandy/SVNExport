@@ -1,5 +1,6 @@
 import os
 import sys
+import xml.dom.minidom
 
 import wx
 import wx.richtext
@@ -58,6 +59,66 @@ class SVNExportFrame( wx_svnexport.Frame ):
         self.m_timer = wx.Timer(self, wx.ID_ANY)
         self.Bind(wx.EVT_TIMER, self.OnTimer, self.m_timer)
 
+        self.__read_config__()
+        
+    def __read_config__(self):
+        self.config_file = os.path.join(os.path.expanduser('~'), '.svnexport.xml')
+
+        if os.path.isfile(self.config_file):
+            self.config_dom = xml.dom.minidom.parse(self.config_file)
+
+            root = self.config_dom.documentElement
+
+            lists = root.getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
+
+            for u in lists.getElementsByTagName('url'):
+                self.m_comboBoxURL.Insert(u.childNodes[0].data, 0)
+                
+            self.m_dirPickerPath.SetPath(lists.getElementsByTagName('path')[0].childNodes[0].data)
+        else:
+            self.config_dom = xml.dom.minidom.getDOMImplementation().createDocument(None, 'svnexport', None)
+            
+            root = self.config_dom.documentElement
+
+            gui_node = self.config_dom.createElement('gui')
+            lists_node = self.config_dom.createElement('lists')
+
+            root.appendChild(gui_node)
+            gui_node.appendChild(lists_node)
+
+            with open(self.config_file, 'w') as f:
+                self.config_dom.writexml(f)
+
+    def __write_config__(self):        
+        lists = self.config_dom.documentElement.getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
+
+        pathnode = self.config_dom.createElement('path')
+        pathnode.appendChild(self.config_dom.createTextNode(self.m_dirPickerPath.GetPath()))
+
+        pathn_old = lists.getElementsByTagName('path')
+        if len(pathn_old) > 0:
+            lists.replaceChild(pathnode, pathn_old[0])
+        else:
+            lists.appendChild(pathnode)
+        
+        with open(self.config_file, 'w') as f:
+            self.config_dom.writexml(f)
+
+    def _append_url(self, url):
+        lists = self.config_dom.getElementsByTagName('svnexport')[0].getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
+
+        urls = []
+        for u in lists.getElementsByTagName('url'):
+            urls.append(u.childNodes[0].data)
+            
+        if not url in urls:
+            self.m_comboBoxURL.Insert(url, 0)
+
+            urlnode = self.config_dom.createElement('url')
+            urlnode.appendChild(self.config_dom.createTextNode(url))
+            
+            lists.appendChild(urlnode)
+
     def _SetEnabled(self, state=True):
         self.m_buttonList.Enable(state)
         self.m_buttonExport.Enable(state)
@@ -74,8 +135,10 @@ class SVNExportFrame( wx_svnexport.Frame ):
         self.m_statusBar.SetStatusText('')
         self.m_gaugeProgress.SetValue(0)
         
-        rurl = self.m_textCtrlURL.GetValue()
-        if not str(rurl).strip() == '': 
+        rurl = self.m_comboBoxURL.GetValue()
+        if not str(rurl).strip() == '':
+            self._append_url(rurl)
+            
             entry_rev = self.m_checkBoxEntryRev.IsChecked()
 
             self._SetDisabled()
@@ -113,10 +176,12 @@ class SVNExportFrame( wx_svnexport.Frame ):
     def OnExport(self, evt):
         self.m_statusBar.SetStatusText('')
         
-        self.rurl = self.m_textCtrlURL.GetValue()
+        self.rurl = self.m_comboBoxURL.GetValue()
         if str(self.rurl).strip() == '':
             self.m_statusBar.SetStatusText('Repository URL is empty!')        
             return
+
+        self._append_url(self.rurl)
         
         self.epath = self.m_dirPickerPath.GetPath()
         if str(self.epath).strip() == '':
@@ -141,6 +206,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
             self.m_timer.Start(1, True)
         
     def OnExit(self, evt):
+        self.__write_config__()
         self.Close()
 
 class SVNExportApp(wx.App):

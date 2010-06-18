@@ -25,8 +25,9 @@ class Frame ( wx.Frame ):
 		self.m_staticText1.Wrap( -1 )
 		bSizer1.Add( self.m_staticText1, 0, wx.LEFT|wx.TOP, 5 )
 		
-		self.m_textCtrlURL = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
-		bSizer1.Add( self.m_textCtrlURL, 0, wx.ALL|wx.EXPAND, 5 )
+		m_comboBoxURLChoices = []
+		self.m_comboBoxURL = wx.ComboBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, m_comboBoxURLChoices, 0 )
+		bSizer1.Add( self.m_comboBoxURL, 0, wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_staticText2 = wx.StaticText( self, wx.ID_ANY, u"Path to export to", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText2.Wrap( -1 )
