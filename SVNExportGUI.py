@@ -59,6 +59,8 @@ class SVNExportFrame( wx_svnexport.Frame ):
         self.m_timer = wx.Timer(self, wx.ID_ANY)
         self.Bind(wx.EVT_TIMER, self.OnTimer, self.m_timer)
 
+        self.max_urls = 5
+
         self.__read_config__()
         
     def __read_config__(self):
@@ -70,12 +72,17 @@ class SVNExportFrame( wx_svnexport.Frame ):
             root = self.config_dom.documentElement
 
             lists = root.getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
-
+            #Read the recent urls
             for u in lists.getElementsByTagName('url'):
-                self.m_comboBoxURL.Insert(u.childNodes[0].data, 0)
-                
-            self.m_dirPickerPath.SetPath(lists.getElementsByTagName('path')[0].childNodes[0].data)
+                self.m_comboBoxURL.Append(u.childNodes[0].data.strip())
+            #self.m_comboBoxURL.SetSelection(0)
+
+            #Read the last path used
+            pathl = lists.getElementsByTagName('path')
+            if len(pathl) > 0:
+                self.m_dirPickerPath.SetPath(pathl[0].childNodes[0].data.strip())
         else:
+            #Create an empty structure
             self.config_dom = xml.dom.minidom.getDOMImplementation().createDocument(None, 'svnexport', None)
             
             root = self.config_dom.documentElement
@@ -100,24 +107,34 @@ class SVNExportFrame( wx_svnexport.Frame ):
             lists.replaceChild(pathnode, pathn_old[0])
         else:
             lists.appendChild(pathnode)
-        
-        with open(self.config_file, 'w') as f:
-            self.config_dom.writexml(f)
 
-    def _append_url(self, url):
-        lists = self.config_dom.getElementsByTagName('svnexport')[0].getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
-
-        urls = []
+        #Remove all urls
         for u in lists.getElementsByTagName('url'):
-            urls.append(u.childNodes[0].data)
-            
-        if not url in urls:
-            self.m_comboBoxURL.Insert(url, 0)
+            lists.removeChild(u)
 
+        #Set new url list
+        for u in self.m_comboBoxURL.GetStrings():
             urlnode = self.config_dom.createElement('url')
-            urlnode.appendChild(self.config_dom.createTextNode(url))
+            urlnode.appendChild(self.config_dom.createTextNode(u))
             
             lists.appendChild(urlnode)
+
+        #Write config to file
+        with open(self.config_file, 'w') as f:
+            self.config_dom.writexml(f, addindent='  ', newl='\n')
+
+    def _append_url(self, url):
+        url = url.strip()
+        
+        idx = self.m_comboBoxURL.FindString(url)
+        if idx >= 0:
+            self.m_comboBoxURL.Delete(idx)
+            
+        #if not url in self.m_comboBoxURL.GetStrings():
+        self.m_comboBoxURL.Insert(url, 0)
+
+        if self.m_comboBoxURL.GetCount() > self.max_urls:
+            self.m_comboBoxURL.Delete(self.max_urls)
 
     def _SetEnabled(self, state=True):
         self.m_buttonList.Enable(state)
