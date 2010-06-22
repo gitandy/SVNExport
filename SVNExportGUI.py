@@ -1,12 +1,21 @@
 import os
 import sys
+import gettext
 import xml.dom.minidom
 
 import wx
 import wx.richtext
+
 import wx_svnexport
 
 from svnexport import *
+
+import locale
+__lang__ = locale.getdefaultlocale()[0]
+del locale
+
+if sys.platform == 'win32':
+    os.environ['LANGUAGE'] = __lang__
 
 import version
 __version__ = version.VERSION
@@ -40,6 +49,16 @@ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.'''      
+
+__encoding__ = 'cp1252'
+try:
+    if sys.stdout.encoding:
+        __encoding__ = sys.stdout.encoding
+except:
+    pass
+
+gettext.install('SVNExportGUI', 'locale', unicode=1, codeset=__encoding__)
+wx_svnexport._ = _
 
 class SVNExportFrame( wx_svnexport.Frame ):
     def __init__(self, parent):
@@ -87,7 +106,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
                 if len(pathl) > 0:
                     self.m_dirPickerPath.SetPath(pathl[0].childNodes[0].data.strip())
             except:
-                self.m_statusBar.SetStatusText('Damaged config file! Generating empty config...')
+                self.m_statusBar.SetStatusText(_('Damaged config file! Generating empty config...'))
                 self.__generate_config__()
         else:
             self.__generate_config__()
@@ -156,7 +175,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
 
     def OnAbout(self, evt):
         text = 'SVN-Export\n\n' + 'Version: %s\n\n' %__version__ + __copyright__
-        dlg = wx.MessageDialog(self, text, 'About', wx.OK|wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(self, text, _('About'), wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
 
     def OnList(self, evt):
@@ -174,7 +193,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
 
                 self._append_url(rurl)
             
-                dlg = wx.Dialog(self, wx.ID_ANY, 'List of Repository Entries',
+                dlg = wx.Dialog(self, wx.ID_ANY, _('List of Repository Entries'),
                                 style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
                 bSizer = wx.BoxSizer(wx.VERTICAL)	
                 m_richText = wx.richtext.RichTextCtrl(dlg, wx.ID_ANY, wx.EmptyString,
@@ -193,7 +212,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         
             self._SetEnabled()
         else:
-            self.m_statusBar.SetStatusText('Repository URL is empty!')
+            self.m_statusBar.SetStatusText(_('Repository URL is empty!'))
 
     def OnTimer(self, evt):
         if len(self._entries) > 0:
@@ -205,7 +224,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
             except SVNExportException, e:
                 self.m_statusBar.SetStatusText(e.msg)
         else:
-            self.m_statusBar.SetStatusText('Done')
+            self.m_statusBar.SetStatusText(_('Done'))
             self._SetEnabled()
         
     def OnExport(self, evt):
@@ -213,12 +232,12 @@ class SVNExportFrame( wx_svnexport.Frame ):
         
         self.rurl = self.m_comboBoxURL.GetValue()
         if str(self.rurl).strip() == '':
-            self.m_statusBar.SetStatusText('Repository URL is empty!')        
+            self.m_statusBar.SetStatusText(_('Repository URL is empty!'))        
             return
         
         self.epath = self.m_dirPickerPath.GetPath()
         if str(self.epath).strip() == '':
-            self.m_statusBar.SetStatusText('Export path is empty!')        
+            self.m_statusBar.SetStatusText(_('Export path is empty!'))        
             return
 
         entry_rev = self.m_checkBoxEntryRev.IsChecked()
@@ -228,7 +247,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         if not os.path.exists(self.epath):
             os.mkdir(self.epath)
         elif not len(os.listdir(self.epath)) == 0:
-            self.m_statusBar.SetStatusText('Folder "%s" is not empty!' %self.epath)
+            self.m_statusBar.SetStatusText(_('Folder "%s" is not empty!') %self.epath)
             return
 
         try:

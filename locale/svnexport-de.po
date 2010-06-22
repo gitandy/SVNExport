@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-06-22 15:58+Westeuropäische Sommerzeit\n"
+"PO-Revision-Date: 2010-06-22 16:02+0100\n"
+"Last-Translator: Andreas Schawo <andreas@schawo.de>\n"
+"Language-Team: LANGUAGE <andreas@schawo.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: svnexport.py:63
+msgid "URL \"%s\" is not available"
+msgstr "URL \"%s\" ist nicht verfügbar"
+
+#: svnexport.py:93
+msgid "Created directory \"%s\"..."
+msgstr "Ordner erstellt \"%s\"..."
+
+#: svnexport.py:97
+msgid "Exported \"%s\": r%i..."
+msgstr "Exportiert \"%s\": r%i..."
+
+#: svnexport.py:115
+msgid "D"
+msgstr "O"
+
+#: svnexport.py:117
+msgid "F"
+msgstr "D"
+
+#: svnexport.py:142
+msgid "The repository URL"
+msgstr "Archiv URL"
+
+#: svnexport.py:144
+msgid "Export to path"
+msgstr "Exportpfad"
+
+#: svnexport.py:147
+msgid "Use the revison of the entry instead of repository"
+msgstr "Benutze Eintragsrevision anstatt Archivrevision"
+
+#: svnexport.py:150
+msgid "List info only. Do not export somthing"
+msgstr "Nur Auflisten"
+
+#: svnexport.py:153
+msgid "Show version and exit"
+msgstr "Zeige Version und ende"
+
+#: svnexport.py:163
+msgid ""
+"Repository must be specified\n"
+"Try \"%s --help\" for more information"
+msgstr ""
+"Archiv muss angegeben werden\n"
+"Versuchen sie \"%s --help\" für weitere Informationen"
+
+#: svnexport.py:174
+msgid "Path \"%s\" already exists"
+msgstr "Exportpfad \"%s\" besteht bereits"
+

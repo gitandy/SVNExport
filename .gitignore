@@ -9,3 +9,5 @@ test
 *.pyc
 *.pyo
 *.bak
+*.pot
+*.mo

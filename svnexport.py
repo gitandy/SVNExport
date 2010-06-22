@@ -1,7 +1,15 @@
 import os
 import sys
 import urllib
+import gettext
 import pysvn
+
+import locale
+__lang__ = locale.getdefaultlocale()[0]
+del locale
+
+if sys.platform == 'win32':
+    os.environ['LANGUAGE'] = __lang__
 
 import version
 __version__ = version.VERSION
@@ -43,14 +51,19 @@ try:
 except:
     pass
 
+gettext.bindtextdomain('svnexport', 'locale')
+gettext.bind_textdomain_codeset('svnexport', __encoding__)
+gettext.textdomain('svnexport')
+_ = gettext.gettext
+
 class SVNExportException(Exception):
     def __init__(self, url, *args):
         Exception.__init__(self, *args)
         self.url = url
-        self.msg = 'URL "%s" is not available' %self.url
+        self.msg = _('URL "%s" is not available').decode(__encoding__) %self.url
         
     def __str__(self):
-        return self.msg
+        return self.msg.encode(__encoding__)
 
 def get_entries(rurl, entry_rev=False):
     try:
@@ -77,11 +90,11 @@ def export_entry(rurl, epath, entry):
     rev = entry[2]
     
     if entry[1] == 'dir':
-        log = 'Created directory "%s"...' %uname
+        log = _('Created directory "%s"...') %uname
         os.mkdir(os.path.join(epath, uname))
     elif entry[1] == 'file':
         try:
-            log = 'Exported "%s": r%i...' %(uname, rev)
+            log = _('Exported "%s": r%i...') %(uname, rev)
 
             root, ext = os.path.splitext(uname)
             fname = '%s-r%i%s' %(root, rev, ext)
@@ -99,9 +112,9 @@ def list_entries(entries):
     for e in entries:
         t = None
         if e[1] == 'dir':
-            t = 'D'
+            t = _('D')
         elif e[1] == 'file':
-            t = 'F'
+            t = _('F')
 
         if not t == None:
             text += '%s: %s: r%i\n' %(t, e[0].decode('utf-8'), e[2])
@@ -126,18 +139,18 @@ if __name__ == '__main__':
     
     parser = OptionParser(usage=usage)
     parser.add_option('-r', '--repos', dest='repos',
-                      help='The repository URL', metavar='URL')
+                      help=_('The repository URL'), metavar='URL')
     parser.add_option('-o', '--output', dest='output',
-                      help='Export to path', metavar='PATH')
+                      help=_('Export to path'), metavar='PATH')
     parser.add_option('-e', '--entry-rev', dest='entry_rev',
                       action='store_true', default=False,
-                      help='Use the revison of the entry instead of repository')
+                      help=_('Use the revison of the entry instead of repository'))
     parser.add_option('-l', '--list', dest='list',
                       action='store_true', default=False,
-                      help='List info only. Do not export somthing')
+                      help=_('List info only. Do not export somthing'))
     parser.add_option('-v', '--version', dest='version',
                       action='store_true', default=False,
-                      help='Show version and exit')
+                      help=_('Show version and exit'))
 
     (options, args) = parser.parse_args()
 
@@ -147,7 +160,7 @@ if __name__ == '__main__':
 
     epath = None 
     if not options.repos:
-        print 'Repository must be specified\nTry "%s --help" for more information' %sys.argv[0]
+        print _('Repository must be specified\nTry "%s --help" for more information') %sys.argv[0]
         sys.exit(1)
     else:
         if options.output == None:
@@ -158,9 +171,13 @@ if __name__ == '__main__':
         
     if not options.list:
         if os.path.exists(epath):
-            print 'Path "%s" already exists' %epath
+            print _('Path "%s" already exists') %epath
             sys.exit(1)
         else:
             os.mkdir(epath)
 
-    export(options.repos, epath, options.list, options.entry_rev)
+    try:
+        export(options.repos, epath, options.list, options.entry_rev)
+    except Exception, e:
+        print e
+        

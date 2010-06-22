@@ -5,6 +5,7 @@
 [Files]
 Source: dist\{#MyAppExeName}; DestDir: {app}
 Source: dist\svnexport.exe; DestDir: {app}
+Source: locale\*.mo; DestDir: {app}\locale; Flags: recursesubdirs
 Source: svnexport.ico; DestDir: {app}
 Source: LICENSE; DestDir: {app}
 [Setup]
@@ -32,8 +33,8 @@ LanguageName=German
 LanguageID=$0407
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; IconFilename: {app}\{#MyAppExeName}; WorkingDir: {app}
-Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\bug.ico; Comment: Game; IconIndex: 0
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\bug.ico; Comment: Game; IconIndex: 0
+Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\svnexport.ico; Comment: {#MyAppName}; IconIndex: 0
+Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\svnexport.ico; Comment: {#MyAppName}; IconIndex: 0
 [Languages]
 Name: German; MessagesFile: compiler:Languages\German.isl
 [Tasks]
