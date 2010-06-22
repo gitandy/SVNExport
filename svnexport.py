@@ -41,21 +41,33 @@ try:
 except:
     pass
 
+class SVNExportException(Exception):
+    def __init__(self, url, *args):
+        Exception.__init__(self, *args)
+        self.url = url
+        self.msg = 'URL "%s" is not available' %self.url
+        
+    def __str__(self):
+        return self.msg
+
 def get_entries(rurl, entry_rev=False):
-    client = pysvn.Client()
-    info = client.info2(rurl, recurse=True)
+    try:
+        client = pysvn.Client()
+        info = client.info2(rurl, recurse=True)
 
-    entries = []
-    for i in info[1:]:
-        name = i[0]
-        kind = str(i[1]['kind'])
-        rev = i[1]['rev'].number
-        if entry_rev:
-            rev = i[1]['last_changed_rev'].number
+        entries = []
+        for i in info[1:]:
+            name = i[0]
+            kind = str(i[1]['kind'])
+            rev = i[1]['rev'].number
+            if entry_rev:
+                rev = i[1]['last_changed_rev'].number
 
-        entries.append((name, kind, rev))
+            entries.append((name, kind, rev))
 
-    return tuple(entries)
+        return tuple(entries)
+    except pysvn.ClientError:
+        raise SVNExportException(rurl)
 
 def export_entry(rurl, epath, entry):
     log = ''
@@ -66,13 +78,16 @@ def export_entry(rurl, epath, entry):
         log = 'Created directory "%s"...' %uname
         os.mkdir(os.path.join(epath, uname))
     elif entry[1] == 'file':
-        log = 'Exported "%s": r%i...' %(uname, rev)
+        try:
+            log = 'Exported "%s": r%i...' %(uname, rev)
 
-        root, ext = os.path.splitext(uname)
-        fname = '%s-r%i%s' %(root, rev, ext)
-        with open(os.path.join(epath, fname), 'wb') as f:
-            client = pysvn.Client()
-            f.write(client.cat(rurl + '/' + urllib.quote(entry[0])))
+            root, ext = os.path.splitext(uname)
+            fname = '%s-r%i%s' %(root, rev, ext)
+            with open(os.path.join(epath, fname), 'wb') as f:
+                client = pysvn.Client()
+                f.write(client.cat(rurl + '/' + urllib.quote(entry[0])))
+        except pysvn.ClientError:
+            raise SVNExportException(rurl)
 
     return log
 
@@ -93,6 +108,7 @@ def list_entries(entries):
 
 def export(rurl, epath, list_only=False, entry_rev=False):
     entries = get_entries(rurl)
+    
     if not list_only:
         for e in entries:
             print export_entry(rurl, epath, e).encode(__encoding__)
@@ -146,4 +162,3 @@ if __name__ == '__main__':
             os.mkdir(epath)
 
     export(options.repos, epath, options.list, options.entry_rev)
-            
