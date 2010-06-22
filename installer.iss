@@ -1,6 +1,7 @@
 #include <version.iss>
 #define MyAppName "SVN-Export"
 #define MyAppExeName "SVNExportGUI.exe"
+#define MyAppDescr "Exportiert SVN Archive in einen lokalen Ordner"
 
 [Files]
 Source: dist\{#MyAppExeName}; DestDir: {app}
@@ -33,14 +34,12 @@ LanguageName=German
 LanguageID=$0407
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; IconFilename: {app}\{#MyAppExeName}; WorkingDir: {app}
-Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\svnexport.ico; Comment: {#MyAppName}; IconIndex: 0
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\svnexport.ico; Comment: {#MyAppName}; IconIndex: 0
+Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\{#MyAppExeName}; Comment: {#MyAppDescr}
+Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\{#MyAppExeName}; Comment: {#MyAppDescr}
 [Languages]
 Name: German; MessagesFile: compiler:Languages\German.isl
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
 [UninstallDelete]
-Name: {app}\*.pyc; Type: files
-Name: {app}\*.pyo; Type: files
 Name: {app}\*.log; Type: files
