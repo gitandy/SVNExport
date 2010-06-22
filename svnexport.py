@@ -3,7 +3,9 @@ import sys
 import urllib
 import pysvn
 
-__version__ = 'v0.1'
+import version
+__version__ = version.VERSION
+del version
 __author_name__ = 'Andreas Schawo'
 __author_email__ = 'andreas@schawo.de'
 __copyright__ = 'Copyright (c) 2010, Andreas Schawo, All rights reserved'

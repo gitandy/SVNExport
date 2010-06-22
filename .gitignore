@@ -1,6 +1,7 @@
 \#*\#
 *~
 wx_*.py
+version.py
 dist
 test
 *.pyc
