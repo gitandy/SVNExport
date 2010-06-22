@@ -64,11 +64,10 @@ class SVNExportFrame( wx_svnexport.Frame ):
     def __init__(self, parent):
         wx_svnexport.Frame.__init__(self, parent)
 
-        try:
-            icon = wx.Icon('svnexport.ico', wx.BITMAP_TYPE_ICO, 32, 32)
+        iconf = 'svnexport.ico'
+        if os.path.isfile(iconf):
+            icon = wx.Icon(iconf, wx.BITMAP_TYPE_ICO, 32, 32)
             self.SetIcon(icon)
-        except:
-            pass
 
         self.m_dirPickerPath.SetPath(os.path.join(os.getcwd(), 'export'))
         
