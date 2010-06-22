@@ -2,7 +2,9 @@
 *~
 wx_*.py
 version.py
+version.iss
 dist
+Output
 test
 *.pyc
 *.pyo
