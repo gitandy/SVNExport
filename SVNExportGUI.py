@@ -163,27 +163,31 @@ class SVNExportFrame( wx_svnexport.Frame ):
         
         rurl = self.m_comboBoxURL.GetValue()
         if not str(rurl).strip() == '':
-            self._append_url(rurl)
-            
             entry_rev = self.m_checkBoxEntryRev.IsChecked()
 
             self._SetDisabled()
-            text = list_entries(get_entries(rurl, entry_rev))
+            
+            try:
+                text = list_entries(get_entries(rurl, entry_rev))
 
-            dlg = wx.Dialog(self, wx.ID_ANY, 'List of Repository Entries',
-                            style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
-            bSizer = wx.BoxSizer(wx.VERTICAL)	
-            m_richText = wx.richtext.RichTextCtrl(dlg, wx.ID_ANY, wx.EmptyString,
-                                                  wx.DefaultPosition,
-                                                  wx.DefaultSize,
-                                                  wx.TE_READONLY|wx.HSCROLL|wx.VSCROLL)
-            m_richText.WriteText(text)
-            bSizer.Add(m_richText, 1, wx.EXPAND, 5)
-            stdButtonSizer = dlg.CreateStdDialogButtonSizer(wx.OK)
-            bSizer.Add(stdButtonSizer, 0, wx.ALIGN_BOTTOM|wx.ALIGN_RIGHT|wx.ALL, 5)	
-            dlg.SetSizer(bSizer)
-            dlg.Layout()
-            dlg.ShowModal()
+                self._append_url(rurl)
+            
+                dlg = wx.Dialog(self, wx.ID_ANY, 'List of Repository Entries',
+                                style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
+                bSizer = wx.BoxSizer(wx.VERTICAL)	
+                m_richText = wx.richtext.RichTextCtrl(dlg, wx.ID_ANY, wx.EmptyString,
+                                                      wx.DefaultPosition,
+                                                      wx.DefaultSize,
+                                                      wx.TE_READONLY|wx.HSCROLL|wx.VSCROLL)
+                m_richText.WriteText(text)
+                bSizer.Add(m_richText, 1, wx.EXPAND, 5)
+                stdButtonSizer = dlg.CreateStdDialogButtonSizer(wx.OK)
+                bSizer.Add(stdButtonSizer, 0, wx.ALIGN_BOTTOM|wx.ALIGN_RIGHT|wx.ALL, 5)	
+                dlg.SetSizer(bSizer)
+                dlg.Layout()
+                dlg.ShowModal()
+            except SVNExportException, e:
+                self.m_statusBar.SetStatusText(e.msg)
         
             self._SetEnabled()
         else:
@@ -192,9 +196,12 @@ class SVNExportFrame( wx_svnexport.Frame ):
     def OnTimer(self, evt):
         if len(self._entries) > 0:
             entry = self._entries.pop(0)
-            self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry))
-            self.m_gaugeProgress.SetValue(self.m_gaugeProgress.GetValue()+1)
-            self.m_timer.Start(1, True)
+            try:
+                self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry))
+                self.m_gaugeProgress.SetValue(self.m_gaugeProgress.GetValue()+1)
+                self.m_timer.Start(1, True)
+            except SVNExportException, e:
+                self.m_statusBar.SetStatusText(e.msg)
         else:
             self.m_statusBar.SetStatusText('Done')
             self._SetEnabled()
@@ -206,8 +213,6 @@ class SVNExportFrame( wx_svnexport.Frame ):
         if str(self.rurl).strip() == '':
             self.m_statusBar.SetStatusText('Repository URL is empty!')        
             return
-
-        self._append_url(self.rurl)
         
         self.epath = self.m_dirPickerPath.GetPath()
         if str(self.epath).strip() == '':
@@ -224,13 +229,18 @@ class SVNExportFrame( wx_svnexport.Frame ):
             self.m_statusBar.SetStatusText('Folder "%s" is not empty!' %self.epath)
             return
 
-        self._entries = list(get_entries(self.rurl, entry_rev))
+        try:
+            self._entries = list(get_entries(self.rurl, entry_rev))
 
-        if len(self._entries) > 0:
-            self.m_gaugeProgress.SetRange(len(self._entries))
-            self._SetDisabled()
-            self.m_timer.Start(1, True)
-        
+            self._append_url(self.rurl)
+
+            if len(self._entries) > 0:
+                self.m_gaugeProgress.SetRange(len(self._entries))
+                self._SetDisabled()
+                self.m_timer.Start(1, True)
+        except SVNExportException, e:
+            self.m_statusBar.SetStatusText(e.msg)
+            
     def OnExit(self, evt):
         if self.__closing__:
             evt.Skip()
