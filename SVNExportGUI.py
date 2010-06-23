@@ -98,7 +98,6 @@ class SVNExportFrame( wx_svnexport.Frame ):
                 #Read the recent urls
                 for u in lists.getElementsByTagName('url'):
                     self.m_comboBoxURL.Append(u.childNodes[0].data.strip())
-                #self.m_comboBoxURL.SetSelection(0)
 
                 #Read the last path used
                 pathl = lists.getElementsByTagName('path')
@@ -159,8 +158,8 @@ class SVNExportFrame( wx_svnexport.Frame ):
         if idx >= 0:
             self.m_comboBoxURL.Delete(idx)
             
-        #if not url in self.m_comboBoxURL.GetStrings():
         self.m_comboBoxURL.Insert(url, 0)
+        self.m_comboBoxURL.SetSelection(0)
 
         if self.m_comboBoxURL.GetCount() > self.max_urls:
             self.m_comboBoxURL.Delete(self.max_urls)
