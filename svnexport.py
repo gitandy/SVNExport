@@ -2,6 +2,7 @@ import os
 import sys
 import urllib
 import gettext
+import xml.dom.minidom
 import pysvn
 
 import locale
@@ -65,6 +66,47 @@ class SVNExportException(Exception):
     def __str__(self):
         return self.msg.encode(__encoding__)
 
+class ConfigParser():
+    '''Reads the .svnexport.xml file
+
+Following structure have to be present i.e.:
+<svnexport>
+  <api>
+    <config>
+      <pattern>%(name)s-%(rev)i%(ext)s</pattern>
+    </config>
+  </api>
+</svnexport>'''
+    
+    def __init__(self):
+        self.pattern = None
+        
+        self.__read_config__()
+        
+    def __read_config__(self):
+        self.config_file = os.path.join(os.path.expanduser('~'), '.svnexport.xml')
+
+        if os.path.isfile(self.config_file):
+            try:
+                self.config_dom = xml.dom.minidom.parse(self.config_file)
+
+                root = self.config_dom.documentElement
+
+                config = root.getElementsByTagName('api')[0].getElementsByTagName('config')[0]
+                
+                for cfg in config.childNodes:
+                    if cfg.nodeName == 'pattern':
+                        p = ''
+                        for t in cfg.childNodes:
+                             p += t.data
+
+                        self.pattern = p.strip()
+            except:
+                self.pattern = '%(name)s-%(rev)i%(ext)s'
+        else:
+            self.pattern = '%(name)s-%(rev)i%(ext)s'
+
+
 def get_entries(rurl, entry_rev=False):
     try:
         client = pysvn.Client()
@@ -84,7 +126,7 @@ def get_entries(rurl, entry_rev=False):
     except pysvn.ClientError:
         raise SVNExportException(rurl)
 
-def export_entry(rurl, epath, entry):
+def export_entry(rurl, epath, entry, pattern='%(name)s-%(rev)i%(ext)s'):
     log = ''
     uname = entry[0].decode('utf-8')
     rev = entry[2]
@@ -97,7 +139,9 @@ def export_entry(rurl, epath, entry):
             log = _('Exported "%s": r%i...') %(uname, rev)
 
             root, ext = os.path.splitext(uname)
-            fname = '%s-r%i%s' %(root, rev, ext)
+            fname = pattern %{'name': root,
+                              'rev': rev,
+                              'ext': ext}
             with open(os.path.join(epath, fname), 'wb') as f:
                 client = pysvn.Client()
                 f.write(client.cat(rurl + '/' + urllib.quote(entry[0])))
@@ -112,21 +156,22 @@ def list_entries(entries):
     for e in entries:
         t = None
         if e[1] == 'dir':
-            t = _('D')
+            t = _('Dir')
         elif e[1] == 'file':
-            t = _('F')
+            t = _('File')
 
         if not t == None:
-            text += '%s: %s: r%i\n' %(t, e[0].decode('utf-8'), e[2])
+            text += '%s\t: %s: r%i\n' %(t, e[0].decode('utf-8'), e[2])
 
     return text
 
 def export(rurl, epath, list_only=False, entry_rev=False):
+    cfg = ConfigParser()
     entries = get_entries(rurl)
     
     if not list_only:
         for e in entries:
-            print export_entry(rurl, epath, e).encode(__encoding__)
+            print export_entry(rurl, epath, e, cfg.pattern).encode(__encoding__)
     else:
         print list_entries(entries).encode(__encoding__)
         
