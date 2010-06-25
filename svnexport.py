@@ -167,7 +167,7 @@ def list_entries(entries):
 
 def export(rurl, epath, list_only=False, entry_rev=False):
     cfg = ConfigParser()
-    entries = get_entries(rurl)
+    entries = get_entries(rurl, entry_rev)
     
     if not list_only:
         for e in entries:
