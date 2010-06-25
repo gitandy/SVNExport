@@ -149,7 +149,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
 
         #Write config to file
         with open(self.config_file, 'w') as f:
-            self.config_dom.writexml(f, addindent='  ', newl='\n')
+            self.config_dom.writexml(f)
 
     def _append_url(self, url):
         url = url.strip()
