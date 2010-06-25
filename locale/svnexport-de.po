@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-06-22 15:58+Westeuropäische Sommerzeit\n"
-"PO-Revision-Date: 2010-06-22 16:02+0100\n"
+"POT-Creation-Date: 2010-06-25 14:28+Westeuropäische Sommerzeit\n"
+"PO-Revision-Date: 2010-06-25 14:29+0100\n"
 "Last-Translator: Andreas Schawo <andreas@schawo.de>\n"
 "Language-Team: LANGUAGE <andreas@schawo.de>\n"
 "MIME-Version: 1.0\n"
@@ -16,47 +16,47 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: svnexport.py:63
+#: svnexport.py:64
 msgid "URL \"%s\" is not available"
 msgstr "URL \"%s\" ist nicht verfügbar"
 
-#: svnexport.py:93
+#: svnexport.py:135
 msgid "Created directory \"%s\"..."
 msgstr "Ordner erstellt \"%s\"..."
 
-#: svnexport.py:97
+#: svnexport.py:139
 msgid "Exported \"%s\": r%i..."
 msgstr "Exportiert \"%s\": r%i..."
 
-#: svnexport.py:115
-msgid "D"
-msgstr "O"
+#: svnexport.py:159
+msgid "Dir"
+msgstr "Ordner"
 
-#: svnexport.py:117
-msgid "F"
-msgstr "D"
+#: svnexport.py:161
+msgid "File"
+msgstr "Datei"
 
-#: svnexport.py:142
+#: svnexport.py:187
 msgid "The repository URL"
 msgstr "Archiv URL"
 
-#: svnexport.py:144
+#: svnexport.py:189
 msgid "Export to path"
 msgstr "Exportpfad"
 
-#: svnexport.py:147
+#: svnexport.py:192
 msgid "Use the revison of the entry instead of repository"
 msgstr "Benutze Eintragsrevision anstatt Archivrevision"
 
-#: svnexport.py:150
+#: svnexport.py:195
 msgid "List info only. Do not export somthing"
 msgstr "Nur Auflisten"
 
-#: svnexport.py:153
+#: svnexport.py:198
 msgid "Show version and exit"
 msgstr "Zeige Version und ende"
 
-#: svnexport.py:163
+#: svnexport.py:208
 msgid ""
 "Repository must be specified\n"
 "Try \"%s --help\" for more information"
@@ -64,7 +64,12 @@ msgstr ""
 "Archiv muss angegeben werden\n"
 "Versuchen sie \"%s --help\" für weitere Informationen"
 
-#: svnexport.py:174
+#: svnexport.py:219
 msgid "Path \"%s\" already exists"
 msgstr "Exportpfad \"%s\" besteht bereits"
 
+#~ msgid "D"
+#~ msgstr "O"
+
+#~ msgid "F"
+#~ msgstr "D"
