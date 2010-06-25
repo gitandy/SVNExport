@@ -94,6 +94,16 @@ class SVNExportFrame( wx_svnexport.Frame ):
 
                 root = self.config_dom.documentElement
 
+                #Config
+                config = self.config_dom.documentElement.getElementsByTagName('gui')[0].getElementsByTagName('config')[0]
+                uentryr_node = config.getElementsByTagName('useentryrev')
+
+                if len(uentryr_node) > 0:
+                    if uentryr_node[0].hasAttribute('set'):
+                        if uentryr_node[0].getAttribute('set').strip() == 'True':
+                            self.m_checkBoxEntryRev.SetValue(True)
+                
+                #Lists
                 lists = root.getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
                 #Read the recent urls
                 for u in lists.getElementsByTagName('url'):
@@ -116,15 +126,32 @@ class SVNExportFrame( wx_svnexport.Frame ):
         root = self.config_dom.documentElement
 
         gui_node = self.config_dom.createElement('gui')
-        lists_node = self.config_dom.createElement('lists')
-
         root.appendChild(gui_node)
+
+        #Config
+        cfg_node = self.config_dom.createElement('config')
+        gui_node.appendChild(cfg_node)
+
+        useentryrev_node = self.config_dom.createElement('useentryrev')
+        cfg_node.appendChild(useentryrev_node)
+        useentryrev_node.setAttribute('set', 'False')
+        
+        #Lists
+        lists_node = self.config_dom.createElement('lists')
         gui_node.appendChild(lists_node)
 
         with open(self.config_file, 'w') as f:
             self.config_dom.writexml(f)
 
-    def __write_config__(self):        
+    def __write_config__(self):
+        #Config
+        config = self.config_dom.documentElement.getElementsByTagName('gui')[0].getElementsByTagName('config')[0]
+        uentryr_node = config.getElementsByTagName('useentryrev')
+
+        if len(uentryr_node) > 0:
+            uentryr_node[0].setAttribute('set', str(self.m_checkBoxEntryRev.IsChecked()))
+        
+        #Lists
         lists = self.config_dom.documentElement.getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
 
         pathnode = self.config_dom.createElement('path')
