@@ -1,11 +1,11 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-06-25 14:28+Westeuropäische Sommerzeit\n"
+"POT-Creation-Date: 2010-06-26 13:40+CEST\n"
 "PO-Revision-Date: 2010-06-22 17:47+0100\n"
 "Last-Translator: Andreas Schawo <andreas@schawo.de>\n"
 "Language-Team: LANGUAGE <andreas@schawo.de>\n"
@@ -16,31 +16,31 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: SVNExportGUI.py:117
+#: SVNExportGUI.py:119
 msgid "Damaged config file! Generating empty config..."
 msgstr "Defekte Konfiguration! Erstelle leere Datei..."
 
-#: SVNExportGUI.py:203 wx_svnexport.py:78
+#: SVNExportGUI.py:205 wx_svnexport.py:78
 msgid "About"
 msgstr "Über"
 
-#: SVNExportGUI.py:221
+#: SVNExportGUI.py:223
 msgid "List of Repository Entries"
 msgstr "Liste der Archiveinträge"
 
-#: SVNExportGUI.py:240 SVNExportGUI.py:260
+#: SVNExportGUI.py:242 SVNExportGUI.py:262
 msgid "Repository URL is empty!"
 msgstr "Archiv URL ist nicht angegeben!"
 
-#: SVNExportGUI.py:252
+#: SVNExportGUI.py:254
 msgid "Done"
 msgstr "Fertig"
 
-#: SVNExportGUI.py:265
+#: SVNExportGUI.py:267
 msgid "Export path is empty!"
 msgstr "Export Pfad ist nicht angegeben!"
 
-#: SVNExportGUI.py:275
+#: SVNExportGUI.py:277
 msgid "Folder \"%s\" is not empty!"
 msgstr "Ordner \"%s\" enthält Dateien!"
 

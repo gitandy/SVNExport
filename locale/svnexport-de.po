@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-06-25 14:28+Westeuropäische Sommerzeit\n"
+"POT-Creation-Date: 2010-06-26 13:40+CEST\n"
 "PO-Revision-Date: 2010-06-25 14:29+0100\n"
 "Last-Translator: Andreas Schawo <andreas@schawo.de>\n"
 "Language-Team: LANGUAGE <andreas@schawo.de>\n"
@@ -16,47 +16,47 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: svnexport.py:64
+#: svnexport.py:66
 msgid "URL \"%s\" is not available"
 msgstr "URL \"%s\" ist nicht verfügbar"
 
-#: svnexport.py:135
+#: svnexport.py:137
 msgid "Created directory \"%s\"..."
 msgstr "Ordner erstellt \"%s\"..."
 
-#: svnexport.py:139
+#: svnexport.py:141
 msgid "Exported \"%s\": r%i..."
 msgstr "Exportiert \"%s\": r%i..."
 
-#: svnexport.py:159
+#: svnexport.py:161
 msgid "Dir"
 msgstr "Ordner"
 
-#: svnexport.py:161
+#: svnexport.py:163
 msgid "File"
 msgstr "Datei"
 
-#: svnexport.py:187
+#: svnexport.py:189
 msgid "The repository URL"
 msgstr "Archiv URL"
 
-#: svnexport.py:189
+#: svnexport.py:191
 msgid "Export to path"
 msgstr "Exportpfad"
 
-#: svnexport.py:192
+#: svnexport.py:194
 msgid "Use the revison of the entry instead of repository"
 msgstr "Benutze Eintragsrevision anstatt Archivrevision"
 
-#: svnexport.py:195
+#: svnexport.py:197
 msgid "List info only. Do not export somthing"
 msgstr "Nur Auflisten"
 
-#: svnexport.py:198
+#: svnexport.py:200
 msgid "Show version and exit"
 msgstr "Zeige Version und ende"
 
-#: svnexport.py:208
+#: svnexport.py:210
 msgid ""
 "Repository must be specified\n"
 "Try \"%s --help\" for more information"
@@ -64,7 +64,7 @@ msgstr ""
 "Archiv muss angegeben werden\n"
 "Versuchen sie \"%s --help\" für weitere Informationen"
 
-#: svnexport.py:219
+#: svnexport.py:221
 msgid "Path \"%s\" already exists"
 msgstr "Exportpfad \"%s\" besteht bereits"
 
