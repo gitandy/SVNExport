@@ -127,13 +127,13 @@ class SVNExportFrame( wx_svnexport.Frame ):
             icon = wx.Icon(iconf, wx.BITMAP_TYPE_ICO, 32, 32)
             self.SetIcon(icon)
 
-        self.m_dirPickerPath.SetPath(os.path.join(os.getcwd(), 'export'))
+        self.e_path = os.path.join(os.getcwd(), 'export')
         
-        self.Bind(wx.EVT_BUTTON, self.OnList, self.m_buttonList)
-        self.Bind(wx.EVT_BUTTON, self.OnExport, self.m_buttonExport)
-        self.Bind(wx.EVT_BUTTON, self.OnExit, self.m_buttonExit)
+        self.Bind(wx.EVT_MENU, self.OnList, self.m_menuItemList)
+        self.Bind(wx.EVT_MENU, self.OnExport, self.m_menuItemExport)
+        self.Bind(wx.EVT_MENU, self.OnExit, self.m_menuItemExit)
         self.Bind(wx.EVT_CLOSE, self.OnExit, self)
-        self.Bind(wx.EVT_MENU, self.OnAbout, self.m_menuAbout)
+        self.Bind(wx.EVT_MENU, self.OnAbout, self.m_menuItemAbout)
 
         self.m_timer = wx.Timer(self, wx.ID_ANY)
         self.Bind(wx.EVT_TIMER, self.OnTimer, self.m_timer)
@@ -170,7 +170,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
                 #Read the last path used
                 pathl = lists.getElementsByTagName('path')
                 if len(pathl) > 0:
-                    self.m_dirPickerPath.SetPath(pathl[0].childNodes[0].data.strip())
+                    self.e_path = pathl[0].childNodes[0].data.strip()
             except:
                 self.m_statusBar.SetStatusText(_('Damaged config file! Generating empty config...'))
                 self.__generate_config__()
@@ -213,7 +213,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         lists = self.config_dom.documentElement.getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
 
         pathnode = self.config_dom.createElement('path')
-        pathnode.appendChild(self.config_dom.createTextNode(self.m_dirPickerPath.GetPath().encode(__encoding__)))
+        pathnode.appendChild(self.config_dom.createTextNode(self.e_path.encode(__encoding__)))
 
         pathn_old = lists.getElementsByTagName('path')
         if len(pathn_old) > 0:
@@ -269,8 +269,8 @@ class SVNExportFrame( wx_svnexport.Frame ):
         return use_pwd, user, password, save_pwd
 
     def _SetEnabled(self, state=True):
-        self.m_buttonList.Enable(state)
-        self.m_buttonExport.Enable(state)
+        self.m_menuItemList.Enable(state)
+        self.m_menuItemExport.Enable(state)
 
     def _SetDisabled(self):
         self._SetEnabled(False)
@@ -320,7 +320,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         if len(self._entries) > 0:
             entry = self._entries.pop(0)
             try:
-                self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry, auth_callback=self._auth_callback))
+                self.m_statusBar.SetStatusText(export_entry(self.rurl, self.e_path, entry, auth_callback=self._auth_callback))
                 self.m_gaugeProgress.SetValue(self.m_gaugeProgress.GetValue()+1)
                 self.m_timer.Start(1, True)
             except SVNExportException, e:
@@ -331,38 +331,36 @@ class SVNExportFrame( wx_svnexport.Frame ):
         
     def OnExport(self, evt):
         self.m_statusBar.SetStatusText('')
+        self.m_gaugeProgress.SetValue(0)
         
         self.rurl = self.m_comboBoxURL.GetValue()
         if str(self.rurl).strip() == '':
             self.m_statusBar.SetStatusText(_('Repository URL is empty!'))        
             return
-        
-        self.epath = self.m_dirPickerPath.GetPath()
-        if self.epath.strip() == '':
-            self.m_statusBar.SetStatusText(_('Export path is empty!'))        
-            return
 
-        entry_rev = self.m_checkBoxEntryRev.IsChecked()
+        dird = wx.DirDialog(self, '', os.path.split(self.e_path)[0])
+        if dird.ShowModal() == wx.ID_OK:
+            e_path = dird.GetPath()
+            
+            entry_rev = self.m_checkBoxEntryRev.IsChecked()
 
-        self.m_gaugeProgress.SetValue(0)
+            if not len(os.listdir(e_path)) == 0:
+                self.m_statusBar.SetStatusText(_('Folder "%s" is not empty!') %e_path)
+                return
 
-        if not os.path.exists(self.epath):
-            os.mkdir(self.epath)
-        elif not len(os.listdir(self.epath)) == 0:
-            self.m_statusBar.SetStatusText(_('Folder "%s" is not empty!') %self.epath)
-            return
+            self.e_path = e_path
+            
+            try:
+                self._entries = list(get_entries(self.rurl, entry_rev))
 
-        try:
-            self._entries = list(get_entries(self.rurl, entry_rev))
+                self._append_url(self.rurl)
 
-            self._append_url(self.rurl)
-
-            if len(self._entries) > 0:
-                self.m_gaugeProgress.SetRange(len(self._entries))
-                self._SetDisabled()
-                self.m_timer.Start(1, True)
-        except SVNExportException, e:
-            self.m_statusBar.SetStatusText(e.msg)
+                if len(self._entries) > 0:
+                    self.m_gaugeProgress.SetRange(len(self._entries))
+                    self._SetDisabled()
+                    self.m_timer.Start(1, True)
+            except SVNExportException, e:
+                self.m_statusBar.SetStatusText(e.msg)
             
     def OnExit(self, evt):
         if self.__closing__:

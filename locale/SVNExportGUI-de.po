@@ -1,6 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
 #
 msgid ""
 msgstr ""
@@ -73,29 +74,41 @@ msgid "URL to repository"
 msgstr "Archiv URL"
 
 #: wx_svnexport.py:37
-msgid "Path to export to"
-msgstr "Exportpfad"
-
-#: wx_svnexport.py:41
-msgid "Select a folder"
-msgstr "Ordner wählen"
-
-#: wx_svnexport.py:44
 msgid "Use entry revision instead of repository"
 msgstr "Benutze Eintragsrevision anstatt Archivrevision"
 
-#: wx_svnexport.py:62
+#: wx_svnexport.py:55
+msgid "Export..."
+msgstr "Exportieren..."
+
+#: wx_svnexport.py:58
 msgid "List"
 msgstr "Liste"
 
-#: wx_svnexport.py:65
-msgid "Export"
-msgstr "Exportieren"
-
-#: wx_svnexport.py:68
+#: wx_svnexport.py:63
 msgid "Exit"
 msgstr "Beenden"
 
-#: wx_svnexport.py:81
+#: wx_svnexport.py:66
+msgid "File"
+msgstr "Datei"
+
+#: wx_svnexport.py:72
 msgid "?"
 msgstr "?"
+
+#~ msgid "Choose a directory"
+#~ msgstr "Wählen Sie ein Verzeichnis"
+
+#~ msgid "Export path is empty!"
+#~ msgstr "Export Pfad ist nicht angegeben!"
+
+#, fuzzy
+#~ msgid "Export path..."
+#~ msgstr "Export Pfad ist nicht angegeben!"
+
+#~ msgid "Path to export to"
+#~ msgstr "Exportpfad"
+
+#~ msgid "Select a folder"
+#~ msgstr "Ordner wählen"
