@@ -12,7 +12,7 @@ Source: LICENSE; DestDir: {app}
 [Setup]
 AppCopyright=©2010, Andreas Schawo <andreas@schawo.de>
 AppName={#MyAppName}
-AppVerName={#MyAppVersion}
+AppVerName={#MyAppName}-{#MyAppVersion}
 PrivilegesRequired=none
 DefaultDirName={pf}\{#MyAppName}
 AppID={{B11E4A7B-310E-46EF-92CC-52FF02EAF2D1}
