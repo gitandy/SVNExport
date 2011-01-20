@@ -110,9 +110,11 @@ Following structure have to be present i.e.:
 
 
 def get_entries(rurl, entry_rev=False):
+    rurlfixed = urllib.quote(rurl, '/:')
+
     try:
         client = pysvn.Client()
-        info = client.info2(rurl, recurse=True)
+        info = client.info2(rurlfixed, recurse=True)
 
         entries = []
         for i in info[1:]:
@@ -132,6 +134,8 @@ def export_entry(rurl, epath, entry, pattern='%(name)s-%(rev)i%(ext)s'):
     log = ''
     uname = entry[0].decode('utf-8')
     rev = entry[2]
+
+    rurlfixed = urllib.quote(rurl, '/:')
     
     if entry[1] == 'dir':
         log = _('Created directory "%s"...') %uname
@@ -146,7 +150,7 @@ def export_entry(rurl, epath, entry, pattern='%(name)s-%(rev)i%(ext)s'):
                               'ext': ext}
             with open(os.path.join(epath, fname), 'wb') as f:
                 client = pysvn.Client()
-                f.write(client.cat(rurl + '/' + urllib.quote(entry[0])))
+                f.write(client.cat(rurlfixed + '/' + urllib.quote(entry[0])))
         except pysvn.ClientError:
             raise SVNExportException(rurl)
 
