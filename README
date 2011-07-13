@@ -1,0 +1,4 @@
+SVNExport is a tool to export files from SVN repositories with the revision
+number appended to the files.
+
+The tool is available as a GUI or commandline version.
