@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-06-26 13:40+CEST\n"
-"PO-Revision-Date: 2010-06-25 14:29+0100\n"
+"Project-Id-Version: SVNExport\n"
+"POT-Creation-Date: 2011-07-14 14:37+Westeuropäische Sommerzeit\n"
+"PO-Revision-Date: 2011-07-14 14:39+0100\n"
 "Last-Translator: Andreas Schawo <andreas@schawo.de>\n"
-"Language-Team: LANGUAGE <andreas@schawo.de>\n"
+"Language-Team: German <andreas@schawo.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,43 +20,43 @@ msgstr ""
 msgid "URL \"%s\" is not available"
 msgstr "URL \"%s\" ist nicht verfügbar"
 
-#: svnexport.py:137
+#: svnexport.py:141
 msgid "Created directory \"%s\"..."
 msgstr "Ordner erstellt \"%s\"..."
 
-#: svnexport.py:141
+#: svnexport.py:145
 msgid "Exported \"%s\": r%i..."
 msgstr "Exportiert \"%s\": r%i..."
 
-#: svnexport.py:161
+#: svnexport.py:165
 msgid "Dir"
 msgstr "Ordner"
 
-#: svnexport.py:163
+#: svnexport.py:167
 msgid "File"
 msgstr "Datei"
 
-#: svnexport.py:189
+#: svnexport.py:193
 msgid "The repository URL"
 msgstr "Archiv URL"
 
-#: svnexport.py:191
+#: svnexport.py:195
 msgid "Export to path"
 msgstr "Exportpfad"
 
-#: svnexport.py:194
+#: svnexport.py:198
 msgid "Use the revison of the entry instead of repository"
 msgstr "Benutze Eintragsrevision anstatt Archivrevision"
 
-#: svnexport.py:197
+#: svnexport.py:201
 msgid "List info only. Do not export somthing"
 msgstr "Nur Auflisten"
 
-#: svnexport.py:200
+#: svnexport.py:204
 msgid "Show version and exit"
 msgstr "Zeige Version und ende"
 
-#: svnexport.py:210
+#: svnexport.py:214
 msgid ""
 "Repository must be specified\n"
 "Try \"%s --help\" for more information"
@@ -64,7 +64,7 @@ msgstr ""
 "Archiv muss angegeben werden\n"
 "Versuchen sie \"%s --help\" für weitere Informationen"
 
-#: svnexport.py:221
+#: svnexport.py:225
 msgid "Path \"%s\" already exists"
 msgstr "Exportpfad \"%s\" besteht bereits"
 
