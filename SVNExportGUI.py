@@ -19,6 +19,13 @@ del locale
 if sys.platform == 'win32':
     os.environ['LANGUAGE'] = __lang__
 
+__encoding__ = 'cp1252'
+try:
+    if sys.stdout.encoding:
+        __encoding__ = sys.stdout.encoding
+except:
+    pass
+
 import version
 __version__ = version.VERSION
 del version
@@ -157,7 +164,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         lists = self.config_dom.documentElement.getElementsByTagName('gui')[0].getElementsByTagName('lists')[0]
 
         pathnode = self.config_dom.createElement('path')
-        pathnode.appendChild(self.config_dom.createTextNode(self.m_dirPickerPath.GetPath()))
+        pathnode.appendChild(self.config_dom.createTextNode(self.m_dirPickerPath.GetPath().encode(__encoding__)))
 
         pathn_old = lists.getElementsByTagName('path')
         if len(pathn_old) > 0:
@@ -178,7 +185,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
 
         #Write config to file
         with open(self.config_file, 'w') as f:
-            self.config_dom.writexml(f)
+            self.config_dom.writexml(f, encoding=__encoding__)
 
     def _append_url(self, url):
         url = url.strip()
@@ -263,7 +270,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
             return
         
         self.epath = self.m_dirPickerPath.GetPath()
-        if str(self.epath).strip() == '':
+        if self.epath.strip() == '':
             self.m_statusBar.SetStatusText(_('Export path is empty!'))        
             return
 
