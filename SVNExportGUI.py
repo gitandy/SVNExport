@@ -320,7 +320,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         if len(self._entries) > 0:
             entry = self._entries.pop(0)
             try:
-                self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry, auth_callback=self.auth_callback))
+                self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry, auth_callback=self._auth_callback))
                 self.m_gaugeProgress.SetValue(self.m_gaugeProgress.GetValue()+1)
                 self.m_timer.Start(1, True)
             except SVNExportException, e:
