@@ -1,4 +1,4 @@
-#include <version.iss>
+#include "version.iss"
 #define MyAppName "SVN-Export"
 #define MyAppExeName "SVNExportGUI.exe"
 #define MyAppDescr "Exportiert SVN Archive in einen lokalen Ordner"
