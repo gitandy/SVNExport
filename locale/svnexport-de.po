@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SVNExport\n"
-"POT-Creation-Date: 2011-07-14 14:37+Westeuropäische Sommerzeit\n"
-"PO-Revision-Date: 2011-07-14 14:39+0100\n"
+"POT-Creation-Date: 2012-02-03 12:50+Westeuropäische Normalzeit\n"
+"PO-Revision-Date: 2012-02-03 12:50+0100\n"
 "Last-Translator: Andreas Schawo <andreas@schawo.de>\n"
 "Language-Team: German <andreas@schawo.de>\n"
 "MIME-Version: 1.0\n"
@@ -16,47 +16,82 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: svnexport.py:66
+#: svnexport.py:68
 msgid "URL \"%s\" is not available"
 msgstr "URL \"%s\" ist nicht verfügbar"
 
-#: svnexport.py:141
+#: svnexport.py:114
+msgid "Authentication required"
+msgstr "Authentifizierung erforderlich"
+
+#: svnexport.py:118
+#: svnexport.py:120
+msgid "Archive"
+msgstr "Archiv"
+
+#: svnexport.py:123
+#: svnexport.py:129
+msgid "Username"
+msgstr "Benutzername"
+
+#: svnexport.py:131
+msgid "Password"
+msgstr "Passwort"
+
+#: svnexport.py:136
+msgid "n"
+msgstr "n"
+
+#: svnexport.py:136
+#: svnexport.py:142
+msgid "y"
+msgstr "j"
+
+#: svnexport.py:137
+msgid "Save password? [y/n] "
+msgstr "Passwort speichern? [j/n] "
+
+#: svnexport.py:174
 msgid "Created directory \"%s\"..."
 msgstr "Ordner erstellt \"%s\"..."
 
-#: svnexport.py:145
+#: svnexport.py:178
 msgid "Exported \"%s\": r%i..."
 msgstr "Exportiert \"%s\": r%i..."
 
-#: svnexport.py:165
+#: svnexport.py:199
 msgid "Dir"
 msgstr "Ordner"
 
-#: svnexport.py:167
+#: svnexport.py:201
 msgid "File"
 msgstr "Datei"
 
-#: svnexport.py:193
+#: svnexport.py:227
 msgid "The repository URL"
 msgstr "Archiv URL"
 
-#: svnexport.py:195
+#: svnexport.py:229
 msgid "Export to path"
 msgstr "Exportpfad"
 
-#: svnexport.py:198
+#: svnexport.py:232
 msgid "Use the revison of the entry instead of repository"
 msgstr "Benutze Eintragsrevision anstatt Archivrevision"
 
-#: svnexport.py:201
+#: svnexport.py:235
 msgid "List info only. Do not export somthing"
 msgstr "Nur Auflisten"
 
-#: svnexport.py:204
+#: svnexport.py:237
+msgid "Loginname for authentication"
+msgstr "Benutzername für Authentifizierung"
+
+#: svnexport.py:240
 msgid "Show version and exit"
 msgstr "Zeige Version und ende"
 
-#: svnexport.py:214
+#: svnexport.py:250
 msgid ""
 "Repository must be specified\n"
 "Try \"%s --help\" for more information"
@@ -64,7 +99,7 @@ msgstr ""
 "Archiv muss angegeben werden\n"
 "Versuchen sie \"%s --help\" für weitere Informationen"
 
-#: svnexport.py:225
+#: svnexport.py:261
 msgid "Path \"%s\" already exists"
 msgstr "Exportpfad \"%s\" besteht bereits"
 

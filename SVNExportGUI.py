@@ -31,8 +31,8 @@ __version__ = version.VERSION
 del version
 __author_name__ = 'Andreas Schawo'
 __author_email__ = 'andreas@schawo.de'
-__copyright__ = 'Copyright (c) 2010, Andreas Schawo, All rights reserved'
-__license__ = '''Copyright (c) 2010, Andreas Schawo <andreas@schawo.de>
+__copyright__ = 'Copyright (c) 2010-2012, Andreas Schawo, All rights reserved'
+__license__ = '''Copyright (c) 2010-2012, Andreas Schawo <andreas@schawo.de>
 
 All rights reserved.
 
@@ -68,6 +68,55 @@ except:
 
 gettext.install('SVNExportGUI', 'locale', unicode=1, codeset=__encoding__)
 wx_svnexport._ = _
+
+class AuthDialog(wx.Dialog):
+    def __init__(self, parent, realm='', user=''):
+        wx.Dialog.__init__(self, parent, -1, _('Authentication required'), size = wx.Size( 250,230 ), style = wx.DEFAULT_DIALOG_STYLE|wx.MAXIMIZE_BOX )
+
+        self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
+
+        bSizer = wx.BoxSizer( wx.VERTICAL )
+		
+        self.m_staticTextRealm = wx.StaticText( self, wx.ID_ANY, realm, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer.Add( self.m_staticTextRealm, 0, wx.ALL, 5 )
+
+        self.m_staticText1 = wx.StaticText( self, wx.ID_ANY, _('Username'), wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer.Add( self.m_staticText1, 0, wx.LEFT|wx.RIGHT|wx.TOP, 5 )
+        
+        self.m_textCtrlUsername = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer.Add( self.m_textCtrlUsername, 0, wx.ALL|wx.EXPAND, 5 )
+        
+        self.m_staticText2 = wx.StaticText( self, wx.ID_ANY, _('Password'), wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer.Add( self.m_staticText2, 0, wx.LEFT|wx.RIGHT|wx.TOP, 5 )
+        
+        self.m_textCtrlPwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PASSWORD  )
+        bSizer.Add( self.m_textCtrlPwd, 0, wx.ALL|wx.EXPAND, 5 )
+        
+        self.m_checkBoxSavePwd = wx.CheckBox( self, wx.ID_ANY, _('Save password'), wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer.Add( self.m_checkBoxSavePwd, 0, wx.ALL, 5 )
+
+        bSizer.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+
+        m_sdbSizer1 = wx.StdDialogButtonSizer()
+        self.m_sdbSizer1OK = wx.Button( self, wx.ID_OK )
+        m_sdbSizer1.AddButton( self.m_sdbSizer1OK )
+        self.m_sdbSizer1Cancel = wx.Button( self, wx.ID_CANCEL )
+        m_sdbSizer1.AddButton( self.m_sdbSizer1Cancel )
+        m_sdbSizer1.Realize();
+        bSizer.Add( m_sdbSizer1, 1, wx.EXPAND, 5 )
+        
+        self.SetSizer( bSizer )
+        self.Layout()
+
+    def getUsername(self):
+        return self.m_textCtrlUsername.GetValue()
+
+    def getPassword(self):
+        return self.m_textCtrlPwd.GetValue()
+
+    def savePassword(self):
+        return self.m_checkBoxSavePwd.IsChecked()
+
 
 class SVNExportFrame( wx_svnexport.Frame ):
     def __init__(self, parent):
@@ -200,6 +249,25 @@ class SVNExportFrame( wx_svnexport.Frame ):
         if self.m_comboBoxURL.GetCount() > self.max_urls:
             self.m_comboBoxURL.Delete(self.max_urls)
 
+    def _auth_callback(self, realm, user, may_save):
+        realm_parts = realm.split()
+        if len(realm_parts) > 1:
+            realm = realm_parts[1]
+
+        use_pwd = 0
+        password = ''
+        save_pwd = False
+
+        dlg = AuthDialog(self, _('Authentication required for Archive:') + '\n' + realm, user)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            use_pwd = 1
+            user = dlg.getUsername()
+            password = dlg.getPassword()
+            save_pwd = dlg.savePassword()
+            
+        return use_pwd, user, password, save_pwd
+
     def _SetEnabled(self, state=True):
         self.m_buttonList.Enable(state)
         self.m_buttonExport.Enable(state)
@@ -223,7 +291,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
             self._SetDisabled()
             
             try:
-                text = list_entries(get_entries(rurl, entry_rev))
+                text = list_entries(get_entries(rurl, entry_rev, auth_callback=self._auth_callback))
 
                 self._append_url(rurl)
             
@@ -252,7 +320,7 @@ class SVNExportFrame( wx_svnexport.Frame ):
         if len(self._entries) > 0:
             entry = self._entries.pop(0)
             try:
-                self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry))
+                self.m_statusBar.SetStatusText(export_entry(self.rurl, self.epath, entry, auth_callback=self.auth_callback))
                 self.m_gaugeProgress.SetValue(self.m_gaugeProgress.GetValue()+1)
                 self.m_timer.Start(1, True)
             except SVNExportException, e:

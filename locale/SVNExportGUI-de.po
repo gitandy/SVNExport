@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SVNExport-GUI\n"
-"POT-Creation-Date: 2011-07-14 14:37+Westeuropäische Sommerzeit\n"
-"PO-Revision-Date: 2011-07-14 14:40+0100\n"
+"POT-Creation-Date: 2012-02-03 16:31+Westeuropäische Normalzeit\n"
+"PO-Revision-Date: 2012-02-03 12:32+0100\n"
 "Last-Translator: Andreas Schawo <andreas@schawo.de>\n"
 "Language-Team: German <andreas@schawo.de>\n"
 "MIME-Version: 1.0\n"
@@ -16,33 +16,51 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: SVNExportGUI.py:126
+#: SVNExportGUI.py:74
+msgid "Authentication required"
+msgstr "Authentifizierung erforderlich"
+
+#: SVNExportGUI.py:83
+msgid "Username"
+msgstr "Benutzername"
+
+#: SVNExportGUI.py:89
+msgid "Password"
+msgstr "Passwort"
+
+#: SVNExportGUI.py:95
+msgid "Save password"
+msgstr "Passwort speichern"
+
+#: SVNExportGUI.py:175
 msgid "Damaged config file! Generating empty config..."
 msgstr "Defekte Konfiguration! Erstelle leere Datei..."
 
-#: SVNExportGUI.py:212
-#: wx_svnexport.py:78
+#: SVNExportGUI.py:261
+msgid "Authentication required for Archive:"
+msgstr "Authentifizierung für Archiv:"
+
+#: SVNExportGUI.py:280 wx_svnexport.py:78
 msgid "About"
 msgstr "Über"
 
-#: SVNExportGUI.py:230
+#: SVNExportGUI.py:298
 msgid "List of Repository Entries"
 msgstr "Liste der Archiveinträge"
 
-#: SVNExportGUI.py:249
-#: SVNExportGUI.py:269
+#: SVNExportGUI.py:317 SVNExportGUI.py:337
 msgid "Repository URL is empty!"
 msgstr "Archiv URL ist nicht angegeben!"
 
-#: SVNExportGUI.py:261
+#: SVNExportGUI.py:329
 msgid "Done"
 msgstr "Fertig"
 
-#: SVNExportGUI.py:274
+#: SVNExportGUI.py:342
 msgid "Export path is empty!"
 msgstr "Export Pfad ist nicht angegeben!"
 
-#: SVNExportGUI.py:284
+#: SVNExportGUI.py:352
 msgid "Folder \"%s\" is not empty!"
 msgstr "Ordner \"%s\" enthält Dateien!"
 
@@ -81,4 +99,3 @@ msgstr "Beenden"
 #: wx_svnexport.py:81
 msgid "?"
 msgstr "?"
-

@@ -19,8 +19,8 @@ __version__ = version.VERSION
 del version
 __author_name__ = 'Andreas Schawo'
 __author_email__ = 'andreas@schawo.de'
-__copyright__ = 'Copyright (c) 2010, Andreas Schawo, All rights reserved'
-__license__ = '''Copyright (c) 2010, Andreas Schawo <andreas@schawo.de>
+__copyright__ = 'Copyright (c) 2010-2012, Andreas Schawo, All rights reserved'
+__license__ = '''Copyright (c) 2010-2012, Andreas Schawo <andreas@schawo.de>
 
 All rights reserved.
 
@@ -58,6 +58,8 @@ gettext.bindtextdomain('svnexport', 'locale')
 gettext.bind_textdomain_codeset('svnexport', __encoding__)
 gettext.textdomain('svnexport')
 _ = gettext.gettext
+
+username = None
 
 class SVNExportException(Exception):
     def __init__(self, url, *args):
@@ -108,12 +110,43 @@ Following structure have to be present i.e.:
         else:
             self.pattern = '%(name)s-%(rev)i%(ext)s'
 
+def callback_getLogin(realm, user, may_save):
+    print(_('Authentication required'))
+    
+    realm_parts = realm.split()
+    if len(realm_parts) > 1:
+        print(_('Archive') + ': %s ' %realm_parts[1])
+    else:
+        print(_('Archive') + ': %s ' %realm)
+        
+    if not username:
+        sys.stdout.write(_('Username') + ': ')
+        user = sys.stdin.readline().strip()
+        if len(user) == 0:
+            return 0, '', '', False
+    else:
+        user = username
+        print(_('Username') + ': %s ' %user)
 
-def get_entries(rurl, entry_rev=False):
+    sys.stdout.write(_('Password') + ': ')
+    password = sys.stdin.readline().strip()
+
+    save_password = u''
+    if may_save == 1:
+        while not save_password.lower() in [_('y'), _('n')]:
+            sys.stdout.write(_('Save password? [y/n] '))
+            save_password = sys.stdin.readline().strip()
+
+    print('')
+    
+    return 1, user, password, save_password == _('y')
+    
+def get_entries(rurl, entry_rev=False, auth_callback=callback_getLogin):
     rurlfixed = urllib.quote(rurl, '/:')
 
     try:
         client = pysvn.Client()
+        client.callback_get_login = auth_callback
         info = client.info2(rurlfixed, recurse=True)
 
         entries = []
@@ -130,7 +163,7 @@ def get_entries(rurl, entry_rev=False):
     except pysvn.ClientError:
         raise SVNExportException(rurl)
 
-def export_entry(rurl, epath, entry, pattern='%(name)s-%(rev)i%(ext)s'):
+def export_entry(rurl, epath, entry, pattern='%(name)s-%(rev)i%(ext)s', auth_callback=callback_getLogin):
     log = ''
     uname = entry[0].decode('utf-8')
     rev = entry[2]
@@ -150,6 +183,7 @@ def export_entry(rurl, epath, entry, pattern='%(name)s-%(rev)i%(ext)s'):
                               'ext': ext}
             with open(os.path.join(epath, fname), 'wb') as f:
                 client = pysvn.Client()
+                client.callback_get_login = auth_callback
                 f.write(client.cat(rurlfixed + '/' + urllib.quote(entry[0])))
         except pysvn.ClientError:
             raise SVNExportException(rurl)
@@ -185,8 +219,8 @@ def export(rurl, epath, list_only=False, entry_rev=False):
 if __name__ == '__main__':
     from optparse import OptionParser
     
-    usage = '''usage: %prog [-e] -r URL [-o PATH]]
-       %prog [-e] -l'''
+    usage = '''usage: %prog [-e] [-u USER] -r URL [-o PATH]]
+       %prog [-e] [-u USER] -l'''
     
     parser = OptionParser(usage=usage)
     parser.add_option('-r', '--repos', dest='repos',
@@ -199,6 +233,8 @@ if __name__ == '__main__':
     parser.add_option('-l', '--list', dest='list',
                       action='store_true', default=False,
                       help=_('List info only. Do not export somthing'))
+    parser.add_option('-u', '--username', dest='user', default=None,
+                      help=_('Loginname for authentication'), metavar='USER')
     parser.add_option('-v', '--version', dest='version',
                       action='store_true', default=False,
                       help=_('Show version and exit'))
@@ -228,6 +264,7 @@ if __name__ == '__main__':
             os.mkdir(epath)
 
     try:
+        username = options.user
         export(options.repos, epath, options.list, options.entry_rev)
     except Exception, e:
         print e
